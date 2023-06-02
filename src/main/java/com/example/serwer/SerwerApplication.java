@@ -13,16 +13,8 @@ import java.util.List;
 @SpringBootApplication
 @RestController
 public class SerwerApplication {
-	private int playerId=0;
 
 	public static void main(String[] args) {
 		SpringApplication.run(SerwerApplication.class, args);
-	}
-
-	@GetMapping("/getplayerid")
-	public int getPlayerId() {
-		playerId++;
-		if(playerId>=5) playerId=1;
-		return playerId;
 	}
 }

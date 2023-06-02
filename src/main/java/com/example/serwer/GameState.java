@@ -12,11 +12,15 @@ public class GameState {
     private ArrayList<Integer> fieldPrices;
     private ArrayList<Integer> fieldPunishments;
     private ArrayList<String> names;
+    private int whoseTurn;
+    private int playerId;
 
     private static volatile GameState instance = null;
 
 
     private GameState() {
+        whoseTurn=1;
+        playerId=0;
         arraysConstructor();
         initNumberArrays(playerPositions, 4, 0);
         initNumberArrays(money, 4, 30);
@@ -156,4 +160,22 @@ public class GameState {
     public ArrayList<Integer> getPlayerPositions() {
         return playerPositions;
     }
+
+    public int getPlayerId() {
+        return playerId;
+    }
+
+    public void setPlayerId(int playerId) {
+        this.playerId = playerId;
+    }
+
+    public int getWhoseTurn() {
+        return whoseTurn;
+    }
+
+    public void endTurn(){
+        whoseTurn++;
+        if(whoseTurn==playerId+1) whoseTurn=1;
+    }
+
 }
