@@ -20,7 +20,7 @@ public class GameState {
         arraysConstructor();
         initNumberArrays(playerPositions, 4, 0);
         initNumberArrays(money, 4, 30);
-        initNumberArrays(positionOwners, 23, -1);
+        initNumberArrays(positionOwners, 24, -1);
         initNames();
         initFieldPrices();
         initFieldPunishments();
@@ -109,13 +109,15 @@ public class GameState {
     }
 
     public void updatePlayerPosition(MovePawnBody body){
+        if(body.getField()>=24){
+            body.setField(body.getField()%24);
+            changeMoney(body.getPlayerId(), 3);
+        }
         playerPositions.set(body.getPlayerId(),body.getField());
         for(int i=0;i< positionOwners.size();i++){
             if(playerPositions.get(body.getPlayerId())==i && positionOwners.get(i)!=-1 && positionOwners.get(i)!=body.getPlayerId()){
-                int before = GameState.getInstance().getMoney().get(body.getPlayerId());
                 int punishment = GameState.getInstance().getFieldPunishments().get(i);
-                System.out.println(before-punishment);
-                GameState.getInstance().getMoney().set(body.getPlayerId(),before - punishment);
+                changeMoney(body.getPlayerId(), -1*punishment);
             }
         }
     }
@@ -128,6 +130,11 @@ public class GameState {
 
     public ArrayList<Integer> getMoney() {
         return money;
+    }
+
+    public void changeMoney(int id, int value){
+        int before = GameState.getInstance().getMoney().get(id);
+        GameState.getInstance().getMoney().set(id,before + value);
     }
 
     public ArrayList<Integer> getPositionOwners() {

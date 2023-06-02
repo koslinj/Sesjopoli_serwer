@@ -11,4 +11,8 @@ public class MovePawnBody {
     public int getPlayerId() {
         return playerID;
     }
+
+    public void setField(int fieldNumber) {
+        this.fieldNumber = fieldNumber;
+    }
 }
