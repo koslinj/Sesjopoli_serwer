@@ -3,6 +3,7 @@ package com.example.serwer;
 import com.example.serwer.body.MovePawnBody;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 public class GameState {
@@ -16,6 +17,7 @@ public class GameState {
     private ArrayList<Integer> fieldPunishments;
     private ArrayList<String> names;
     private ArrayList<Boolean> stopFieldFlags;
+    private ArrayList<Boolean> playerLostFlags;
     private int whoseTurn;
     private int playerId; // do zmiany
 
@@ -30,6 +32,7 @@ public class GameState {
         initNumberArrays(money, 4, 30);
         initNumberArrays(positionOwners, NUMBER_OF_FIELDS, -1);
         initNumberArrays(stopFieldFlags,4,false);
+        initNumberArrays(playerLostFlags,4,false);
         initNames();
         initFieldPrices();
         initFieldPunishments();
@@ -103,6 +106,7 @@ public class GameState {
         money = new ArrayList<>();
         positionOwners = new ArrayList<>();
         stopFieldFlags = new ArrayList<>();
+        playerLostFlags = new ArrayList<>();
     }
 
     private <T> void initNumberArrays(ArrayList<T> array, int size, T value) {
@@ -121,20 +125,20 @@ public class GameState {
     public void updatePlayerPosition(MovePawnBody body){
         if(body.getField()>= NUMBER_OF_FIELDS){
             body.setField(body.getField()% NUMBER_OF_FIELDS);
-            changeMoney(body.getPlayerId(), 3);
+            changeMoney(body.getPlayerId(), GameState.getInstance().getMoney().get(body.getPlayerId()) + 3);
         }
         if(body.getField() == STOP_FIELD_INDEX){
             stopFieldFlags.set(body.getPlayerId(),true);
         }
         if(body.getField() == INNOVATION_FIELD_INDEX){
-            changeMoney(body.getPlayerId(), new Random().nextInt(-5,6));
+            changeMoney(body.getPlayerId(), GameState.getInstance().getMoney().get(body.getPlayerId()) + new Random().nextInt(-5,6));
         }
         playerPositions.set(body.getPlayerId(),body.getField());
         for(int i=0;i< positionOwners.size();i++){
             if(playerPositions.get(body.getPlayerId())==i && positionOwners.get(i)!=-1 && positionOwners.get(i)!=body.getPlayerId()){
                 int punishment = GameState.getInstance().getFieldPunishments().get(i);
-                changeMoney(body.getPlayerId(), -1*punishment);
-                changeMoney(positionOwners.get(i), punishment);
+                changeMoney(body.getPlayerId(), GameState.getInstance().getMoney().get(body.getPlayerId())-punishment);
+                changeMoney(positionOwners.get(i), GameState.getInstance().getMoney().get(positionOwners.get(i))+punishment);
             }
         }
     }
@@ -150,8 +154,13 @@ public class GameState {
     }
 
     public void changeMoney(int id, int value){
-        int before = GameState.getInstance().getMoney().get(id);
-        GameState.getInstance().getMoney().set(id,before + value);
+        GameState.getInstance().getMoney().set(id,value);
+        if (GameState.getInstance().getMoney().get(id) <= 0){
+            playerLostFlags.set(id, true);
+            if (Collections.frequency(playerLostFlags, true) == playerId - 1 && playerId > 1){
+                whoseTurn = 0;
+            }
+        }
     }
 
     public ArrayList<Integer> getPositionOwners() {
@@ -187,16 +196,25 @@ public class GameState {
     }
 
     public void endTurn(){
+        System.out.println("turn: " + whoseTurn);
         whoseTurn++;
-        if(hasToSkipTurn()){
+        while (playerLostFlags.get(whoseTurn - 1) || hasToSkipTurn(whoseTurn - 1) || (whoseTurn==playerId+1)){
+            if(hasToSkipTurn(whoseTurn - 1)){
+                stopFieldFlags.set(whoseTurn-1,false);
+            }
+            if(whoseTurn==playerId+1){
+                whoseTurn=0;
+            }
             whoseTurn++;
-            stopFieldFlags.set(whoseTurn-2,false);
         }
-        if(whoseTurn==playerId+1) whoseTurn=1;
     }
 
-    private Boolean hasToSkipTurn() {
-        return stopFieldFlags.get(whoseTurn - 1);
+    private Boolean hasToSkipTurn(int index) {
+        return stopFieldFlags.get(index);
+    }
+
+    public ArrayList<Boolean> getPlayerLostFlags() {
+        return playerLostFlags;
     }
 
 }
