@@ -79,7 +79,7 @@ public class GameState {
         fieldPrices.add(new Random().nextInt(6) + 1);
         fieldPrices.add(0);
         fieldPrices.add(2);
-        fieldPrices.add(20);
+        fieldPrices.add(3);
         fieldPrices.add(0);
         fieldPrices.add(3);
         fieldPrices.add(4);
@@ -87,7 +87,7 @@ public class GameState {
         fieldPrices.add(0); //index
         fieldPrices.add(4);
         fieldPrices.add(0);
-        fieldPrices.add(15);
+        fieldPrices.add(5);
         fieldPrices.add(6);
         fieldPrices.add(0);
         fieldPrices.add(0);
@@ -107,7 +107,15 @@ public class GameState {
     private void initQuestions() {
         questions = new ArrayList<>();
         questions.add(new Question("Liczba 6 zapisana bitowo to:", new ArrayList<String>(Arrays.asList("1100", "0110", "1001", "0011")), 1));
-        questions.add(new Question("Liczba 10 zapisana bitowo to:", new ArrayList<String>(Arrays.asList("1010", "0111", "1100", "1111")), 0));
+        questions.add(new Question("Liczba 1010 zapisana dziesiętnie to:", new ArrayList<String>(Arrays.asList("10", "11", "6", "8")), 0));
+        questions.add(new Question("Ile Nilsen stworzył heurystyk ?", new ArrayList<String>(Arrays.asList("6", "12", "10", "8")), 2));
+        questions.add(new Question("Ile instancji singletonu można stworzyć ?", new ArrayList<String>(Arrays.asList("8", "0", "niesk.", "1")), 3));
+        questions.add(new Question("Która wartość jest największa ?", new ArrayList<String>(Arrays.asList("10 000MB", "1TB", "100GB", "10KB")), 1));
+        questions.add(new Question("Urządzeniem której warstwy jest switch ?", new ArrayList<String>(Arrays.asList("3", "1", "5", "2")), 3));
+        questions.add(new Question("W jaki sposób UNION łączy rekordy ?", new ArrayList<String>(Arrays.asList("Pionowo", "Poziomo", "Krzyżowo", "Okrężnie")), 0));
+        questions.add(new Question("W jaki sposób JOIN łączy rekordy ?", new ArrayList<String>(Arrays.asList("Pionowo", "Poziomo", "Krzyżowo", "Okrężnie")), 1));
+        questions.add(new Question("Ile jedynek jest w binarnym zapisie 17 ?", new ArrayList<String>(Arrays.asList("3", "0", "2", "1")), 2));
+        questions.add(new Question("Ile ustawionych bitów ma maska 255.255.192.0 ?", new ArrayList<String>(Arrays.asList("16", "18", "20", "24")), 1));
     }
 
     private void arraysConstructor() {
@@ -166,6 +174,7 @@ public class GameState {
         GameState.getInstance().getMoney().set(id,value);
         if (GameState.getInstance().getMoney().get(id) <= 0){
             playerLostFlags.set(id, true);
+            GameState.getInstance().endTurn();
             for(int i=0;i<NUMBER_OF_FIELDS;++i){
                 if(positionOwners.get(i) == id){
                     positionOwners.set(i,-1);
