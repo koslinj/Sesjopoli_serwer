@@ -14,7 +14,7 @@ public class GiveAnswer {
     public ResponseEntity<String> updateGameState(@RequestBody GiveAnswerBody body) {
         Question q = GameState.getInstance().getQuestions().get(body.getQuestionIndex());
         if(q.isCorrectAnswer(body.getAnswerIndex())){
-            GameState.getInstance().changeMoney(body.getPlayerId(), 4);
+            GameState.getInstance().changeMoney(body.getPlayerId(),GameState.getInstance().getMoney().get(body.getPlayerId()) + 4);
         }
         System.out.println(body.getAnswerIndex());
         System.out.println(body.getQuestionIndex());

@@ -30,11 +30,11 @@ public class GameState {
         whoseTurn=1;
         playerId=0;
         arraysConstructor();
-        initNumberArrays(playerPositions, 4, 0);
-        initNumberArrays(money, 4, 30);
-        initNumberArrays(positionOwners, NUMBER_OF_FIELDS, -1);
-        initNumberArrays(stopFieldFlags,4,false);
-        initNumberArrays(playerLostFlags,4,false);
+        initArrays(playerPositions, 4, 0);
+        initArrays(money, 4, 30);
+        initArrays(positionOwners, NUMBER_OF_FIELDS, -1);
+        initArrays(stopFieldFlags,4,false);
+        initArrays(playerLostFlags,4,false);
         initNames();
         initFieldPrices();
         initFieldPunishments();
@@ -118,7 +118,7 @@ public class GameState {
         playerLostFlags = new ArrayList<>();
     }
 
-    private <T> void initNumberArrays(ArrayList<T> array, int size, T value) {
+    private <T> void initArrays(ArrayList<T> array, int size, T value) {
         for (int i = 0; i < size; i++) {
             array.add(value);
         }
