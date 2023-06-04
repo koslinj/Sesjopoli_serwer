@@ -3,6 +3,7 @@ package com.example.serwer;
 import com.example.serwer.body.MovePawnBody;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
 
@@ -18,6 +19,7 @@ public class GameState {
     private ArrayList<String> names;
     private ArrayList<Boolean> stopFieldFlags;
     private ArrayList<Boolean> playerLostFlags;
+    private ArrayList<Question> questions;
     private int whoseTurn;
     private int playerId; // do zmiany
 
@@ -36,6 +38,7 @@ public class GameState {
         initNames();
         initFieldPrices();
         initFieldPunishments();
+        initQuestions();
     }
 
     private void initFieldPunishments() {
@@ -99,6 +102,12 @@ public class GameState {
         for (int i=0;i<4;i++) {
             names.add("");
         }
+    }
+
+    private void initQuestions() {
+        questions = new ArrayList<>();
+        questions.add(new Question("Liczba 6 zapisana bitowo to:", new ArrayList<String>(Arrays.asList("1100", "0110", "1001", "0011")), 1));
+        questions.add(new Question("Liczba 10 zapisana bitowo to:", new ArrayList<String>(Arrays.asList("1010", "0111", "1100", "1111")), 0));
     }
 
     private void arraysConstructor() {
@@ -173,6 +182,10 @@ public class GameState {
 
     public ArrayList<String> getNames() {
         return names;
+    }
+
+    public ArrayList<Question> getQuestions() {
+        return questions;
     }
 
     public ArrayList<Integer> getFieldPunishments() {
