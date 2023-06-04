@@ -14,8 +14,8 @@ public class BuyField {
         int playerID = body.getPlayerID();
         int fieldNumber = body.getField();
 
-        GameState.getInstance().changeMoney(playerID,GameState.getInstance().getMoney().get(playerID)- GameState.getInstance().getFieldPrices().get(fieldNumber));
         GameState.getInstance().getPositionOwners().set(fieldNumber,playerID);
+        GameState.getInstance().changeMoney(playerID,GameState.getInstance().getMoney().get(playerID)- GameState.getInstance().getFieldPrices().get(fieldNumber));
 
         System.out.println(playerID);
         System.out.println(fieldNumber);

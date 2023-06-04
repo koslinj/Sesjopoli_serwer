@@ -79,7 +79,7 @@ public class GameState {
         fieldPrices.add(new Random().nextInt(6) + 1);
         fieldPrices.add(0);
         fieldPrices.add(2);
-        fieldPrices.add(3);
+        fieldPrices.add(20);
         fieldPrices.add(0);
         fieldPrices.add(3);
         fieldPrices.add(4);
@@ -87,7 +87,7 @@ public class GameState {
         fieldPrices.add(0); //index
         fieldPrices.add(4);
         fieldPrices.add(0);
-        fieldPrices.add(5);
+        fieldPrices.add(15);
         fieldPrices.add(6);
         fieldPrices.add(0);
         fieldPrices.add(0);
@@ -166,6 +166,11 @@ public class GameState {
         GameState.getInstance().getMoney().set(id,value);
         if (GameState.getInstance().getMoney().get(id) <= 0){
             playerLostFlags.set(id, true);
+            for(int i=0;i<NUMBER_OF_FIELDS;++i){
+                if(positionOwners.get(i) == id){
+                    positionOwners.set(i,-1);
+                }
+            }
             if (Collections.frequency(playerLostFlags, true) == playerId - 1 && playerId > 1){
                 whoseTurn = 0;
             }
