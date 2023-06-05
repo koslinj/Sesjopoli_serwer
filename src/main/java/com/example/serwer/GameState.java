@@ -224,15 +224,19 @@ public class GameState {
 
     public void endTurn(){
         System.out.println("turn: " + whoseTurn);
+        System.out.println("playerID + 1: " + playerId + 1);
         whoseTurn++;
+        if(whoseTurn==playerId+1){
+            whoseTurn=1;
+        }
         while (playerLostFlags.get(whoseTurn - 1) || hasToSkipTurn(whoseTurn - 1) || (whoseTurn==playerId+1)){
             if(hasToSkipTurn(whoseTurn - 1)){
                 stopFieldFlags.set(whoseTurn-1,false);
             }
-            if(whoseTurn==playerId+1){
-                whoseTurn=0;
-            }
             whoseTurn++;
+            if(whoseTurn==playerId+1){
+                whoseTurn=1;
+            }
         }
     }
 
