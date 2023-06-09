@@ -172,7 +172,7 @@ public class GameState {
 
     public void changeMoney(int id, int value){
         GameState.getInstance().getMoney().set(id,value);
-        if (GameState.getInstance().getMoney().get(id) <= 0){
+        if (GameState.getInstance().getMoney().get(id) < 0){
             playerLostFlags.set(id, true);
             GameState.getInstance().endTurn();
             for(int i=0;i<NUMBER_OF_FIELDS;++i){
