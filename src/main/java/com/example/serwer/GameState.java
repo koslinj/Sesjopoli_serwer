@@ -2,10 +2,11 @@ package com.example.serwer;
 
 import com.example.serwer.body.MovePawnBody;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Random;
+import java.sql.Time;
+import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class GameState {
     public static final int NUMBER_OF_FIELDS = 24;
@@ -16,6 +17,7 @@ public class GameState {
     private ArrayList<Integer> positionOwners;
     private ArrayList<Integer> fieldPrices;
     private ArrayList<Integer> fieldPunishments;
+    private PunishmentInfo punishmentInfo;
     private ArrayList<String> names;
     private ArrayList<Boolean> stopFieldFlags;
     private ArrayList<Boolean> playerLostFlags;
@@ -24,6 +26,13 @@ public class GameState {
     private int playerId; // do zmiany
 
     private static volatile GameState instance = null;
+
+    TimerTask clearPunishmentInfoAfterTime = new TimerTask() {
+        @Override
+        public void run() {
+            setPunishmentInfo(-1, -1, -1);
+        }
+    };
 
 
     private GameState() {
@@ -39,6 +48,11 @@ public class GameState {
         initFieldPrices();
         initFieldPunishments();
         initQuestions();
+        initPunishmentInfo();
+    }
+
+    private void initPunishmentInfo() {
+        punishmentInfo = new PunishmentInfo(-1, -1, -1);
     }
 
     private void initFieldPunishments() {
@@ -156,6 +170,9 @@ public class GameState {
                 int punishment = GameState.getInstance().getFieldPunishments().get(i);
                 changeMoney(body.getPlayerId(), GameState.getInstance().getMoney().get(body.getPlayerId())-punishment);
                 changeMoney(positionOwners.get(i), GameState.getInstance().getMoney().get(positionOwners.get(i))+punishment);
+                setPunishmentInfo(body.getPlayerId(), positionOwners.get(i), punishment);
+                ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+                executor.schedule(clearPunishmentInfoAfterTime, 2, TimeUnit.SECONDS);
             }
         }
     }
@@ -248,4 +265,13 @@ public class GameState {
         return playerLostFlags;
     }
 
+    public PunishmentInfo getPunishmentInfo() {
+        return punishmentInfo;
+    }
+
+    public void setPunishmentInfo(int payerId, int payeeId, int cost) {
+        this.punishmentInfo.setPayerId(payerId);
+        this.punishmentInfo.setPayeeId(payeeId);
+        this.punishmentInfo.setCost(cost);
+    }
 }
