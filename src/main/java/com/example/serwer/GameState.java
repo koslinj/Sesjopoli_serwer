@@ -27,14 +27,6 @@ public class GameState {
 
     private static volatile GameState instance = null;
 
-    TimerTask clearPunishmentInfoAfterTime = new TimerTask() {
-        @Override
-        public void run() {
-            setPunishmentInfo(-1, -1, -1);
-        }
-    };
-
-
     private GameState() {
         whoseTurn=1;
         playerId=0;
@@ -52,7 +44,7 @@ public class GameState {
     }
 
     private void initPunishmentInfo() {
-        punishmentInfo = new PunishmentInfo(-1, -1, -1);
+        punishmentInfo = new PunishmentInfo(-1, -1, -1,-1);
     }
 
     private void initFieldPunishments() {
@@ -154,6 +146,7 @@ public class GameState {
     }
 
     public void updatePlayerPosition(MovePawnBody body){
+        setPunishmentInfo(-1, -1, -1,-1);
         if(body.getField()>= NUMBER_OF_FIELDS){
             body.setField(body.getField()% NUMBER_OF_FIELDS);
             changeMoney(body.getPlayerId(), GameState.getInstance().getMoney().get(body.getPlayerId()) + 3);
@@ -170,9 +163,7 @@ public class GameState {
                 int punishment = GameState.getInstance().getFieldPunishments().get(i);
                 changeMoney(body.getPlayerId(), GameState.getInstance().getMoney().get(body.getPlayerId())-punishment);
                 changeMoney(positionOwners.get(i), GameState.getInstance().getMoney().get(positionOwners.get(i))+punishment);
-                setPunishmentInfo(body.getPlayerId(), positionOwners.get(i), punishment);
-                ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-                executor.schedule(clearPunishmentInfoAfterTime, 2, TimeUnit.SECONDS);
+                setPunishmentInfo(body.getPlayerId(), positionOwners.get(i), punishment, i);
             }
         }
     }
@@ -269,9 +260,10 @@ public class GameState {
         return punishmentInfo;
     }
 
-    public void setPunishmentInfo(int payerId, int payeeId, int cost) {
+    public void setPunishmentInfo(int payerId, int payeeId, int cost, int field) {
         this.punishmentInfo.setPayerId(payerId);
         this.punishmentInfo.setPayeeId(payeeId);
         this.punishmentInfo.setCost(cost);
+        this.punishmentInfo.setField(field);
     }
 }

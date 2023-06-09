@@ -21,6 +21,10 @@ public class Question {
         return answers;
     }
 
+    public int getCorrectAnswerIndex() {
+        return correctAnswerIndex;
+    }
+
     public boolean isCorrectAnswer(int answerIndex) {
         return answerIndex == correctAnswerIndex;
     }
