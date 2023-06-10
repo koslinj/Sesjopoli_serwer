@@ -12,7 +12,6 @@ public class MovePawn {
     @PostMapping("/update")
     public ResponseEntity<String> updateGameState(@RequestBody MovePawnBody body) {
         GameState.getInstance().updatePlayerPosition(body);
-        GameState.getInstance().displayGameState();
-        return ResponseEntity.ok("Game state updated successfully POZYCJA");
+        return ResponseEntity.ok("Game state updated successfully");
     }
 }

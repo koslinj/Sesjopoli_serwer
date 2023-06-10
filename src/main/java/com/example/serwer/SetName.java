@@ -13,12 +13,8 @@ public class SetName {
     public ResponseEntity<String> updateGameState(@RequestBody SetNameBody body) {
         int playerID = body.getPlayerID();
         String name = body.getName();
-
         GameState.getInstance().getNames().set(playerID, name);
-
-        System.out.println(playerID);
-        System.out.println(name);
-        return ResponseEntity.ok("Game state updated successfully NAMEE");
+        return ResponseEntity.ok("Game state updated successfully");
     }
 
 }
