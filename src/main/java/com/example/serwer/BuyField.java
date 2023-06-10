@@ -16,6 +16,10 @@ public class BuyField {
 
         GameState.getInstance().getPositionOwners().set(fieldNumber,playerID);
         GameState.getInstance().changeMoney(playerID,GameState.getInstance().getMoney().get(playerID)- GameState.getInstance().getFieldPrices().get(fieldNumber));
+        if(GameState.getInstance().getPositionOwners().get(13) == GameState.getInstance().getPositionOwners().get(19) && GameState.getInstance().getPositionOwners().get(19) != -1){
+            GameState.getInstance().getFieldPunishments().set(13,5);
+            GameState.getInstance().getFieldPunishments().set(19,5);
+        }
 
         System.out.println(playerID);
         System.out.println(fieldNumber);

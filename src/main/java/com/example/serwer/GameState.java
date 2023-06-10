@@ -2,11 +2,10 @@ package com.example.serwer;
 
 import com.example.serwer.body.MovePawnBody;
 
-import java.sql.Time;
-import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Random;
 
 public class GameState {
     public static final int NUMBER_OF_FIELDS = 24;
@@ -53,8 +52,8 @@ public class GameState {
         fieldPunishments.add(2);
         fieldPunishments.add(2);
         fieldPunishments.add(0);
-        fieldPunishments.add(-1);
-        fieldPunishments.add(-1);
+        fieldPunishments.add(new Random().nextInt(6) + 1);
+        fieldPunishments.add(new Random().nextInt(6) + 1);
         fieldPunishments.add(0);
         fieldPunishments.add(2);
         fieldPunishments.add(3);
@@ -62,13 +61,13 @@ public class GameState {
         fieldPunishments.add(3);
         fieldPunishments.add(4);
         fieldPunishments.add(0);
-        fieldPunishments.add(0); //index
+        fieldPunishments.add(1); //index 13
         fieldPunishments.add(4);
         fieldPunishments.add(0);
         fieldPunishments.add(5);
         fieldPunishments.add(6);
         fieldPunishments.add(0);
-        fieldPunishments.add(0);
+        fieldPunishments.add(1); //zahir 19
         fieldPunishments.add(0);
         fieldPunishments.add(6);
         fieldPunishments.add(8);
@@ -90,13 +89,13 @@ public class GameState {
         fieldPrices.add(3);
         fieldPrices.add(4);
         fieldPrices.add(0);
-        fieldPrices.add(0); //index
+        fieldPrices.add(3); //index
         fieldPrices.add(4);
         fieldPrices.add(0);
         fieldPrices.add(5);
         fieldPrices.add(6);
         fieldPrices.add(0);
-        fieldPrices.add(0);
+        fieldPrices.add(3); // zahir
         fieldPrices.add(0);
         fieldPrices.add(6);
         fieldPrices.add(8);
