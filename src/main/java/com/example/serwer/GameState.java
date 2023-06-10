@@ -154,7 +154,12 @@ public class GameState {
             stopFieldFlags.set(body.getPlayerId(),true);
         }
         if(body.getField() == INNOVATION_FIELD_INDEX){
-            changeMoney(body.getPlayerId(), GameState.getInstance().getMoney().get(body.getPlayerId()) + new Random().nextInt(-5,6));
+            int cost;
+            do {
+                cost = new Random().nextInt(-5, 6);
+            }while (cost == 0);
+            changeMoney(body.getPlayerId(), GameState.getInstance().getMoney().get(body.getPlayerId()) +cost);
+            setPunishmentInfo(-1,body.getPlayerId(),cost,18);
         }
         playerPositions.set(body.getPlayerId(),body.getField());
         for(int i=0;i< positionOwners.size();i++){
