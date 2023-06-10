@@ -2,10 +2,7 @@ package com.example.serwer;
 
 import com.example.serwer.body.MovePawnBody;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Random;
+import java.util.*;
 
 public class GameState {
     public static final int NUMBER_OF_FIELDS = 24;
@@ -21,6 +18,7 @@ public class GameState {
     private ArrayList<Boolean> stopFieldFlags;
     private ArrayList<Boolean> playerLostFlags;
     private ArrayList<Question> questions;
+    private HashMap<String,ArrayList<Integer>> colorsOfFields;
     private int whoseTurn;
     private int playerId; // do zmiany
 
@@ -40,6 +38,7 @@ public class GameState {
         initFieldPunishments();
         initQuestions();
         initPunishmentInfo();
+        initColorsOfFields();
     }
 
     private void initPunishmentInfo() {
@@ -100,6 +99,16 @@ public class GameState {
         fieldPrices.add(6);
         fieldPrices.add(8);
         fieldPrices.add(10);
+    }
+
+    private void  initColorsOfFields(){
+        colorsOfFields = new HashMap<>();
+        colorsOfFields.put("Orange", new ArrayList<>(List.of(1,2)));
+        colorsOfFields.put("Yellow", new ArrayList<>(List.of(4,5)));
+        colorsOfFields.put("Purple", new ArrayList<>(List.of(7,8)));
+        colorsOfFields.put("Green", new ArrayList<>(List.of(10,11)));
+        colorsOfFields.put("Blue", new ArrayList<>(List.of(14,16,17)));
+        colorsOfFields.put("Red", new ArrayList<>(List.of(21,22,23)));
     }
 
     private void initNames() {
@@ -164,7 +173,22 @@ public class GameState {
         playerPositions.set(body.getPlayerId(),body.getField());
         for(int i=0;i< positionOwners.size();i++){
             if(playerPositions.get(body.getPlayerId())==i && positionOwners.get(i)!=-1 && positionOwners.get(i)!=body.getPlayerId()){
+
+                int exitFlag=0;
+
                 int punishment = GameState.getInstance().getFieldPunishments().get(i);
+                for(ArrayList<Integer> arrayOfFields : colorsOfFields.values()){
+                    if(arrayOfFields.contains(body.getField())){
+                        for(int fieldId : arrayOfFields){
+                            if(positionOwners.get(fieldId) != positionOwners.get(body.getField())){
+                                exitFlag=1;
+                                break;
+                            }
+                        }
+                        if(exitFlag != 1)
+                            punishment*=2;
+                    }
+                }
                 changeMoney(body.getPlayerId(), GameState.getInstance().getMoney().get(body.getPlayerId())-punishment);
                 changeMoney(positionOwners.get(i), GameState.getInstance().getMoney().get(positionOwners.get(i))+punishment);
                 setPunishmentInfo(body.getPlayerId(), positionOwners.get(i), punishment, i);
