@@ -122,29 +122,38 @@ public class GameState {
             setPunishmentInfo(-1, body.getPlayerId(), cost, 18);
         }
         playerPositions.set(body.getPlayerId(), body.getField());
-        for (int i = 0; i < positionOwners.size(); i++) {
-            if (playerPositions.get(body.getPlayerId()) == i && positionOwners.get(i) != -1 && positionOwners.get(i) != body.getPlayerId()) {
+        for (int fieldIndexCounter = 0; fieldIndexCounter < positionOwners.size(); fieldIndexCounter++) {
+            if (hasSteppedIntoSomeonesField(body, fieldIndexCounter)) {
 
-                int exitFlag = 0;
-
-                int punishment = GameState.getInstance().getFieldPunishments().get(i);
-                for (ArrayList<Integer> arrayOfFields : colorsOfFields.values()) {
-                    if (arrayOfFields.contains(body.getField())) {
-                        for (int fieldId : arrayOfFields) {
-                            if (positionOwners.get(fieldId) != positionOwners.get(body.getField())) {
-                                exitFlag = 1;
-                                break;
-                            }
-                        }
-                        if (exitFlag != 1)
-                            punishment *= 2;
-                    }
-                }
+                int punishment = getPunishment(body, fieldIndexCounter);
                 changeMoney(body.getPlayerId(), GameState.getInstance().getMoney().get(body.getPlayerId()) - punishment);
-                changeMoney(positionOwners.get(i), GameState.getInstance().getMoney().get(positionOwners.get(i)) + punishment);
-                setPunishmentInfo(body.getPlayerId(), positionOwners.get(i), punishment, i);
+                changeMoney(positionOwners.get(fieldIndexCounter), GameState.getInstance().getMoney().get(positionOwners.get(fieldIndexCounter)) + punishment);
+                setPunishmentInfo(body.getPlayerId(), positionOwners.get(fieldIndexCounter), punishment, fieldIndexCounter);
             }
         }
+    }
+
+    private int getPunishment(MovePawnBody body, int fieldIndex) {
+        int exitFlag = 0;
+        int punishment = GameState.getInstance().getFieldPunishments().get(fieldIndex);
+
+        for (ArrayList<Integer> arrayOfFields : colorsOfFields.values()) {
+            if (arrayOfFields.contains(body.getField())) {
+                for (int fieldId : arrayOfFields) {
+                    if (positionOwners.get(fieldId) != positionOwners.get(body.getField())) {
+                        exitFlag = 1;
+                        break;
+                    }
+                }
+                if (exitFlag != 1)
+                    punishment *= 2;
+            }
+        }
+        return punishment;
+    }
+
+    private boolean hasSteppedIntoSomeonesField(MovePawnBody body, int fieldIndex) {
+        return playerPositions.get(body.getPlayerId()) == fieldIndex && positionOwners.get(fieldIndex) != -1 && positionOwners.get(fieldIndex) != body.getPlayerId();
     }
 
 
