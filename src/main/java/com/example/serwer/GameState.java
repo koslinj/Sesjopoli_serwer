@@ -1,6 +1,7 @@
 package com.example.serwer;
 
 import com.example.serwer.body.MovePawnBody;
+import com.example.serwer.controllers.ExitGame;
 
 import java.util.*;
 
@@ -165,7 +166,9 @@ public class GameState {
         GameState.getInstance().getMoney().set(id, value);
         if (GameState.getInstance().getMoney().get(id) < 0) {
             playerLostFlags.set(id, true);
-            GameState.getInstance().endTurn();
+            if(value != ExitGame.PLAYER_EXITED_VALUE || GameState.getInstance().whoseTurn-1 == id){
+                GameState.getInstance().endTurn();
+            }
             for (int i = 0; i < NUMBER_OF_FIELDS; ++i) {
                 if (positionOwners.get(i) == id) {
                     positionOwners.set(i, -1);
