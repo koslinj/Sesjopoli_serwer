@@ -1,5 +1,6 @@
-package com.example.serwer;
+package com.example.serwer.controllers;
 
+import com.example.serwer.GameState;
 import com.example.serwer.body.SetNameBody;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

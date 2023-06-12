@@ -1,5 +1,7 @@
-package com.example.serwer;
+package com.example.serwer.controllers;
 
+import com.example.serwer.GameState;
+import com.example.serwer.Question;
 import com.example.serwer.body.GiveAnswerBody;
 import com.example.serwer.body.MovePawnBody;
 import org.springframework.http.ResponseEntity;
