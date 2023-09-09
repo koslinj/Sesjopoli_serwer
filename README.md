@@ -5,7 +5,7 @@ The role of the server is to handle connections between up to 4 players and keep
 
 Server is created with Spring/SpringBoot
 
-Repo of the game: [https://github.com/koslinj/Sesjopoli_serwer](https://github.com/b4rtm/Sesjopoli)
+Repo of the game: [https://github.com/b4rtm/Sesjopoli](https://github.com/b4rtm/Sesjopoli)
 
 ## Rules
 Our game is similar to Monopoly game but there are some features in comparison to this.
